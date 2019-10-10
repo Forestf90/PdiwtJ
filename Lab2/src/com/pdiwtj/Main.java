@@ -1,5 +1,8 @@
 package com.pdiwtj;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -41,6 +44,29 @@ public class Main {
 
         Room temp = new Room(name,x,y,z,floor,wall);
         temp.display();
+
+        try{
+            BufferedWriter writer = new BufferedWriter(new FileWriter("file.txt"));
+            writer.write(temp.getName());
+            writer.newLine();
+            writer.write("Wymiary: "+temp.getX()+"x"+temp.getY()+"x"+temp.getZ());
+            writer.newLine();
+            writer.write("Objetosc: "+temp.obj());
+            writer.newLine();
+            writer.write("Powierzchnia scian: "+temp.wallObj()+" m2");
+            writer.newLine();
+            writer.write("Powierzchnia podlogi: "+temp.floorObj()+" m2");
+            writer.newLine();
+            writer.write("Cena wykonania podlogi: "+temp.floorPrice()+" zl");
+            writer.newLine();
+            writer.write("Cena wykonania sciany: "+ temp.wallPrice()+" zl");
+
+            writer.close();
+        }catch(IOException io){
+            System.out.println(io.getStackTrace());
+        }
+
+
     }catch(Exception ex){
         System.out.println(ex.getMessage());
         System.out.println("Invalid data - abording .....");
