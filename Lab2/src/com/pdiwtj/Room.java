@@ -10,16 +10,19 @@ public class Room {
     private float floorCost;
     private float wallCost;
 
-    public Room(String n,int xx, int yy, int zz, float floor, float wall){
-
-        this.name=n;
+    public Room(String n, int xx, int yy, int zz, float floor, float wall) {
+        this.name = n;
         this.x = xx;
-        this.y=yy;
-        this.z =zz;
-        this.floorCost=floor;
-        this.wallCost =wall;
-
+        this.y = yy;
+        this.z = zz;
+        this.floorCost = floor;
+        this.wallCost = wall;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
+
     public float getFloorCost() {
         return floorCost;
     }
@@ -60,43 +63,32 @@ public class Room {
         this.z = z;
     }
 
-    public void wallObj(){
-
-        float xx = x*z*2;
-        float yy = x*y*2;
-        float xd = xx+yy;
-        System.out.println("Powierzchnia scian: "+xd+" m2");
+    public float wallObj() {
+        return (x * z * 2) + (z * y * 2);
     }
 
-    public void floorObj(){
-
-        float xd = x*z;
-        System.out.println("Powierzchnia podlogi: "+xd+" m2");
-    }
-    public void obj(){
-
-        System.out.println("Objetosc pokoju :"+x*y*z+" m3");
+    public float floorObj() {
+        return x * y;
     }
 
-    public void wallPrice(){
-        float xx = x*z*2;
-        float yy = x*y*2;
-        float xd = xx+yy;
-        xd =xd *wallCost;
-        System.out.println("Koszt pomalowania scian: "+String.format("%.2f",xd)+" zl");
+    public int obj() {
+        return x * y * z;
     }
 
-    public void floorPrice(){
-        float xd = x*z*floorCost;
-        System.out.println("Koszt wykonania podlogi: "+String.format("%.2f",xd)+" zl");
+    public float wallPrice() {
+        return ((x * z * 2) + (z * y * 2)) * wallCost;
     }
 
-    public void display(){
+    public float floorPrice() {
+        return x * z * floorCost;
+    }
+
+    public void display() {
         System.out.println(name);
-        obj();
-        wallObj();
-        floorObj();
-        wallPrice();
-        floorPrice();
+        System.out.println("Objetosc pokoju :" + obj() + " m3");
+        System.out.println("Powierzchnia scian: " + wallObj() + " m2");
+        System.out.println("Powierzchnia podlogi: " + floorObj() + " m2");
+        System.out.println("Koszt pomalowania scian: " + String.format("%.2f", wallPrice()) + " zl");
+        System.out.println("Koszt wykonania podlogi: " + String.format("%.2f", floorPrice()) + " zl");
     }
 }
