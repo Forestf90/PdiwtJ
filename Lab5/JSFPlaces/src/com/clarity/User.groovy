@@ -1,4 +1,4 @@
-package groovy
+package com.clarity
 
 import javax.faces.context.FacesContext
 import javax.faces.bean.ManagedBean

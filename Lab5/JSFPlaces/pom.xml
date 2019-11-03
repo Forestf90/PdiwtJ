@@ -5,47 +5,73 @@
     <artifactId>JSFPlaces</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
+
     <build>
+        <resources>
+            <resource>
+                <directory>${basedir}/src/groovy</directory>
+            </resource>
+        </resources>
+<!--        <sourceDirectory>src</sourceDirectory>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.8.1</version>-->
+<!--                <configuration>-->
+<!--                    <compilerId>groovy-eclipse-compiler</compilerId>-->
+<!--                    <source>1.8</source>-->
+<!--                    <target>1.8</target>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.codehaus.groovy</groupId>-->
+<!--                        <artifactId>groovy-eclipse-compiler</artifactId>-->
+<!--                        <version>3.4.0-01</version>-->
+<!--                    </dependency>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.codehaus.groovy</groupId>-->
+<!--                        <artifactId>groovy-eclipse-batch</artifactId>-->
+<!--                        <version>2.5.8-01</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
+
+
         <sourceDirectory>src</sourceDirectory>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <compilerId>groovy-eclipse-compiler</compilerId>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-compiler</artifactId>
-                        <version>3.4.0-01</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>2.5.8-01</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.1</version>
+                            <configuration>
+                                <compilerId>groovy-eclipse-compiler</compilerId>
+                                <source>1.8</source>
+                                <target>1.8</target>
+                            </configuration>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>org.codehaus.groovy</groupId>
+                                    <artifactId>groovy-eclipse-compiler</artifactId>
+                                    <version>3.4.0-01</version>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.codehaus.groovy</groupId>
+                                    <artifactId>groovy-eclipse-batch</artifactId>
+                                    <version>2.5.8-01</version>
+                                </dependency>
+                            </dependencies>
+                        </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
+                <version>2.6</version>
                 <configuration>
+                    <warSourceDirectory>WebContent</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <artifactId>maven-compiler-plugin</artifactId>-->
-<!--                <version>3.1</version>-->
-<!--                <configuration>-->
-<!--                    <source>1.7</source>-->
-<!--                    <target>1.7</target>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+
+
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -57,6 +83,11 @@
                 </configuration>
             </plugin>
 
+                <plugin>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-maven-plugin</artifactId>
+                    <version>9.2.2.v20140723</version>
+                </plugin>
 
         </plugins>
     </build>
@@ -97,21 +128,23 @@
             <artifactId>jsf-api</artifactId>
             <version>2.2.4</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>mojarra-jsf-api</artifactId>
-            <version>2.0.0-b04</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sun.faces</groupId>-->
+<!--            <artifactId>mojarra-jsf-api</artifactId>-->
+<!--            <version>2.0.0-b04</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-impl</artifactId>
             <version>2.2.4</version>
         </dependency>
-        <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>mojarra-jsf-impl</artifactId>
-            <version>2.0.0-b04</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sun.faces</groupId>-->
+<!--            <artifactId>mojarra-jsf-impl</artifactId>-->
+<!--            <version>2.0.0-b04</version>-->
+<!--            <scope>provided</scope>-->
+<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/javax.el/javax.el-api -->
         <dependency>

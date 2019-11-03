@@ -1,4 +1,4 @@
-package groovy
+package com.clarity
 
 import com.clarity.MapService
 import com.clarity.Places

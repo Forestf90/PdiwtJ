@@ -1,7 +1,7 @@
 package com.clarity;
 
-import groovy.Place;
-import groovy.User;
+import com.clarity.Place;
+import com.clarity.User;
 
 import java.util.ArrayList;
 

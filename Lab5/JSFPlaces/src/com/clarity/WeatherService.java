@@ -26,6 +26,7 @@ public class WeatherService {
         WEATHER_BASE_URL + "appid=" + YAHOO_APPLICATION_ID
             + "&" + "p=" + zip + "&u="
             + (isFarenheit ? "f" : "c");
+    System.out.println(url);
     return getWeatherFromDocument(getWeatherDocument(url));
   }
   private String getWeatherFromDocument(Document document) {
