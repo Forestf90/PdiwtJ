@@ -2,7 +2,8 @@ package com.clarity;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
+import java.net.URI;
+import java.util.*;
 import java.util.Base64.Encoder;
 
 import java.io.InputStream;
@@ -10,6 +11,8 @@ import java.io.InputStream;
 import javax.faces.bean.ManagedBean;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import java.net.URLEncoder;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -22,28 +25,47 @@ public class WeatherService {
   private static final String YAHOO_APPLICATION_ID =
       "n57MqO36";
   private static final String WEATHER_BASE_URL =
-      "https://weather-ydn-yql.media.yahoo.com/forecastrss?";
+      "https://weather-ydn-yql.media.yahoo.com/forecastrss";
+  private static final String CLIENT_SECRET ="957b14ad4778f87435f1168a3b7279df92e7abeb";
+  private static final String APP_ID ="xQQAvo58";
   private static final long serialVersionUID = 1L;
 
   private static final String CUSTOMER_SECRET="957b14ad4778f87435f1168a3b7279df92e7abeb";
 
   private static final String oauth_consumer_key ="dj0yJmk9VU11VHVYRkphbnBLJmQ9WVdrOWVGRlJRWFp2TlRnbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWJi";
   private static final String oauth_signature_method = "HMAC-SHA1";
-  private static final String oauth_timestamp ="1572855175";
-  private static final String oauth_nonce = "ecbRL2TbU53";
   private static final String oauth_version ="1.0";
   private static final String oauth_signature = "6G/F55t61122s21JBdPNXZKeluo=";
 
 
-  //https://weather-ydn-yql.media.yahoo.com/forecastrss?location=sunnyvale,ca&oauth_consumer_key=dj0yJmk9VU11VHVYRkphbnBLJmQ9WVdrOWVGRlJRWFp2TlRnbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWJi&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1572855175&oauth_nonce=ecbRL2TbU53&oauth_version=1.0&oauth_signature=6G/F55t61122s21JBdPNXZKeluo=
-  //oauth_nonce=ecbRL2TbU53&oauth_version=1.0&oauth_signature=6G/F55t61122s21JBdPNXZKeluo=
   public String getWeatherForZip(String zip,
-      boolean isFarenheit, String city) {
-//    String url =
-//        WEATHER_BASE_URL + "appid=" + YAHOO_APPLICATION_ID
-//            + "&" + "p=" + zip + "&u="
-//            + (isFarenheit ? "f" : "c");
+      boolean isFarenheit, String city) throws Exception{
 
+    long oauth_timestamp = new Date().getTime() / 1000;
+    byte[] nonce = new byte[32];
+    Random rand = new Random();
+    rand.nextBytes(nonce);
+    String oauth_nonce = new String(nonce).replaceAll("\\W", "");
+
+    List<String> parameters = new ArrayList<>();
+    parameters.add("oauth_consumer_key=" + oauth_consumer_key);
+    parameters.add("oauth_nonce=" + oauth_nonce);
+    parameters.add("oauth_signature_method=HMAC-SHA1");
+    parameters.add("oauth_timestamp=" + oauth_timestamp);
+    parameters.add("oauth_version=1.0");
+    // Make sure value is encoded
+    parameters.add("location=" + URLEncoder.encode(city, "UTF-8"));
+    //parameters.add("format=json");
+    Collections.sort(parameters);
+
+    StringBuffer parametersList = new StringBuffer();
+    for (int i = 0; i < parameters.size(); i++) {
+      parametersList.append(((i > 0) ? "&" : "") + parameters.get(i));
+    }
+    System.out.println(parametersList.toString());
+    String signatureString = "GET&" +
+            URLEncoder.encode(WEATHER_BASE_URL, "UTF-8") + "&" +
+            URLEncoder.encode(parametersList.toString(), "UTF-8");
 
     String signature = null;
     try {
@@ -58,18 +80,16 @@ public class WeatherService {
       System.exit(0);
     }
 
-
-
-
-    String url = WEATHER_BASE_URL +"location="+city +
-            "&oauth_consumer_key="+oauth_consumer_key+
-            "&oauth_signature_method="+oauth_signature_method+
-            "&oauth_timestamp="+oauth_timestamp+
-            "&oauth_nonce="+oauth_nonce+
-            "&oauth_version="+oauth_version;
-            //"&oauth_signature="+oauth_signature;
-    //System.out.println(city);
-    return getWeatherFromDocument(getWeatherDocument(url));
+    String url = WEATHER_BASE_URL+"?"+parametersList.toString()+"&oauth_signature="+signature;
+    String authorizationLine = "OAuth " +
+            "oauth_consumer_key=\"" + oauth_consumer_key + "\", " +
+            "oauth_nonce=\"" + oauth_nonce + "\", " +
+            "oauth_timestamp=\"" + oauth_timestamp + "\", " +
+            "oauth_signature_method=\"HMAC-SHA1\", " +
+            "oauth_signature=\"" + signature + "\", " +
+            "oauth_version=\"1.0\"";
+    System.out.println(authorizationLine);
+    return getWeatherFromDocument(getWeatherDocument(url, authorizationLine));
   }
   private String getWeatherFromDocument(Document document) {
     Element item =
@@ -92,13 +112,15 @@ public class WeatherService {
         + "<hr/>"
         + description.getFirstChild().getNodeValue();
   }
-  private Document getWeatherDocument(String url) {
-    //url ="https://weather-ydn-yql.media.yahoo.com/forecastrss?location=sunnyvale,ca&oauth_consumer_key=dj0yJmk9VU11VHVYRkphbnBLJmQ9WVdrOWVGRlJRWFp2TlRnbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWJi&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1572855175&oauth_nonce=ecbRL2TbU53&oauth_version=1.0&oauth_signature=6G/F55t61122s21JBdPNXZKeluo=";
-    System.out.println(url);
+  private Document getWeatherDocument(String url, String authorizationLine) {
+
     Document document = null;
     try {
       HttpClient client = new HttpClient(); // Jakarta Commons
+
       GetMethod gm = new GetMethod(url);
+
+      System.out.println(gm.getURI());
       if (HttpServletResponse.SC_OK == client
           .executeMethod(gm)) {
         InputStream in = gm.getResponseBodyAsStream();
