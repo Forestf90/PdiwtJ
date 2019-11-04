@@ -11,6 +11,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+
 @ManagedBean(name="mapService", eager=true)
 
 public class MapService {
@@ -31,10 +32,12 @@ public class MapService {
           streetAddress, city, state, APPID, i);
       
       if (document == null) {
+        System.out.print("asfadsgdsg");
         cannotAccessWebService = true;
         break;
       }
       urls[i-1] = getMapUrlFromDocument(document);
+      System.out.println(urls[i-1]);
     }
     
     if (cannotAccessWebService) {
@@ -42,6 +45,7 @@ public class MapService {
         urls[i-1] = "images/maps/map-" + i + ".png";
       }      
     }
+        urls[0] ="http://api.tomtom.com/map/1/staticimage?key=VFOCTqfcLytxrjC1REdaxEcempifsfWY&zoom=9&center=13.567893,46.112341&format=jpg&layer=basic&style=main&width=1305&height=748&view=Unified";
     return urls;
   }
   private String getMapUrlFromDocument(Document document) {
@@ -49,6 +53,7 @@ public class MapService {
         (NodeList) document.getElementsByTagName("Result");
 
     Element mapUrl = (Element) result.item(0);
+    System.out.println(result);
     return mapUrl.getFirstChild().getNodeValue();
   }
   private Document getMapDocumentFromWebService(
@@ -61,6 +66,9 @@ public class MapService {
             + "&state=" + state + "&image_width=300"
             + "&image_height=300"
             + "&zoom=" + zoomLevel;
+    System.out.println(url);
+    //url ="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnxh2m-QEDmdYV_bDn-mPQAEDzg1J9CrM&callback=initMap";
+    url = "http://api.tomtom.com/map/1/staticimage?key=VFOCTqfcLytxrjC1REdaxEcempifsfWY&zoom=9&center=13.567893,46.112341&format=jpg&layer=basic&style=main&width=1305&height=748&view=Unified";
     return getDocumentFromUrl(url);
   }
   private Document getDocumentFromUrl(String url) {
@@ -72,12 +80,14 @@ public class MapService {
       int result = client.executeMethod(get);
       if (result == 200) {
         InputStream in = get.getResponseBodyAsStream();
-        document =
+      document =
             DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder().parse(in);
       }
     }
     catch (Exception e) {
+      //System.out.println(e);
+      //throw e;
       return null;
     }
     return document;

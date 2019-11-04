@@ -51,6 +51,7 @@ public class WeatherService {
         + description.getFirstChild().getNodeValue();
   }
   private Document getWeatherDocument(String url) {
+    url ="https://weather-ydn-yql.media.yahoo.com/forecastrss?location=sunnyvale,ca&oauth_consumer_key=dj0yJmk9VU11VHVYRkphbnBLJmQ9WVdrOWVGRlJRWFp2TlRnbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PWJi&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1572855175&oauth_nonce=ecbRL2TbU53&oauth_version=1.0&oauth_signature=6G/F55t61122s21JBdPNXZKeluo=";
     Document document = null;
     try {
       HttpClient client = new HttpClient(); // Jakarta Commons
