@@ -56,7 +56,7 @@ public class Place {
       WeatherService ws = elResolver.getValue(
 	              fc.getELContext(), null, "weatherService1");
 
-	weather = ws.getWeatherForZip(zip, true)
+	weather = ws.getWeatherForZip(zip, true, city)
 	
 	places.addPlace(streetAddress, city, state, mapUrls, weather)
 
