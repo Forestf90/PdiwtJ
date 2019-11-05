@@ -1,0 +1,38 @@
+<html>
+<body>
+<form action="#" th:action="@{/}" th:object="${student}" method="post">
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{name}" /></td>
+            <td th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</td>
+        </tr>
+        <tr>
+            <td>Age:</td>
+            <td><input type="text" th:field="*{age}" /></td>
+            <td th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age Error</td>
+        </tr>
+        <tr>
+            <td>Position:</td>
+            <td>
+                <select th:field="*{position}">
+                    <option th:each="state : ${T(lab3.entities.Position).values()}"
+                            th:value="${state}"
+                            th:text="${state}">
+                    </option>
+                </select>
+            </td>
+            <td th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Position Error</td>
+        </tr>
+        <tr>
+            <td>EU country:</td>
+            <td><input type="checkbox" name="eu" th:checked="${student.eu}"/></td>
+            <td th:if="${#fields.hasErrors('eu')}" th:errors="*{eu}">EU Error</td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
