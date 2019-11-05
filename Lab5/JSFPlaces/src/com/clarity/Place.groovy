@@ -3,6 +3,7 @@ package com.clarity
 import com.clarity.MapService
 import com.clarity.Places
 import com.clarity.WeatherService
+import org.w3c.dom.Document
 
 import javax.faces.context.FacesContext
 import javax.faces.application.Application
@@ -25,6 +26,8 @@ public class Place {
   
   String[] mapUrls = null
   int zoomIndex = 0
+    String lat ="1",
+    longg = "2"
   
   // CONSTRUCTORS
   
@@ -45,20 +48,23 @@ public class Place {
 	FacesContext fc = FacesContext.getCurrentInstance()	    
 	ELResolver elResolver = fc.getApplication().getELResolver();
 
-      MapService ms = elResolver.getValue(
-	  fc.getELContext(), null, "mapService1");
-	
-	 mapUrls = ms.getMap(streetAddress, city, state)
-
-      Places places = elResolver.getValue(
-              fc.getELContext(), null, "places");
 
       WeatherService ws = elResolver.getValue(
 	              fc.getELContext(), null, "weatherService1");
 
-	weather = ws.getWeatherForZip(zip, true, city)
-	
-	places.addPlace(streetAddress, city, state, mapUrls, weather)
+      Document weather_respond = ws.getWeatherForZip(zip, true, city)
+      weather = ws.getWeatherFromDocument(weather_respond)
+      lat = ws.getLatFromDocument(weather_respond)
+      longg = ws.getLongFromDocument(weather_respond)
+
+      MapService ms = elResolver.getValue(
+              fc.getELContext(), null, "mapService1")
+
+      mapUrls = ms.getMap(lat, longg, zoomIndex)
+
+      Places places = elResolver.getValue(
+              fc.getELContext(), null, "places")
+        places.addPlace(streetAddress, city, state, mapUrls, weather)
 
     null
   }
