@@ -67,6 +67,11 @@ public class MapService {
             + "&image_height=300"
             + "&zoom=" + zoomLevel;
     System.out.println(url);
+
+    url = "http://api.tomtom.com/map/1/staticimage?key=VFOCTqfcLytxrjC1REdaxEcempifsfWY"+
+
+
+
     //url ="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnxh2m-QEDmdYV_bDn-mPQAEDzg1J9CrM&callback=initMap";
     url = "http://api.tomtom.com/map/1/staticimage?key=VFOCTqfcLytxrjC1REdaxEcempifsfWY&zoom=9&center=13.567893,46.112341&format=jpg&layer=basic&style=main&width=1305&height=748&view=Unified";
     return getDocumentFromUrl(url);
