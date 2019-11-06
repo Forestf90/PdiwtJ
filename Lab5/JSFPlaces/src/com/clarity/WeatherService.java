@@ -38,8 +38,7 @@ public class WeatherService {
     private static final String oauth_signature = "6G/F55t61122s21JBdPNXZKeluo=";
 
 
-    public Document getWeatherForZip(String zip,
-                                     boolean isFarenheit, String city) throws Exception{
+    public Document getWeatherForZip(boolean isFarenheit, String city) throws Exception{
 
         long oauth_timestamp = new Date().getTime() / 1000;
         byte[] nonce = new byte[32];
@@ -61,7 +60,6 @@ public class WeatherService {
         for (int i = 0; i < parameters.size(); i++) {
             parametersList.append(((i > 0) ? "&" : "") + parameters.get(i));
         }
-        System.out.println(parametersList.toString());
         String signatureString = "GET&" +
                 URLEncoder.encode(WEATHER_BASE_URL, "UTF-8") + "&" +
                 URLEncoder.encode(parametersList.toString(), "UTF-8");
@@ -87,7 +85,6 @@ public class WeatherService {
                 "oauth_signature_method=\"HMAC-SHA1\", " +
                 "oauth_signature=\"" + signature + "\", " +
                 "oauth_version=\"1.0\"";
-        System.out.println(authorizationLine);
         return getWeatherDocument(url, authorizationLine);
     }
     public String getWeatherFromDocument(Document document) {

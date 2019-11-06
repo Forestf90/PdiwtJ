@@ -22,7 +22,8 @@ public class MapService {
 //	String[] urls = getMap("2033 Dove Creek Ct.", "Loveland", "CO");
 //	return urls[0];
 //  }
-    public String[] getMap(String lat, String longg, int zoomIndex) {
+    public String[] getMap(String lat, String longg, int zoomIndex,
+                           String width, String height) {
         String[] urls = new String[12];
         boolean cannotAccessWebService = false;
         zoomIndex=7;
@@ -50,7 +51,8 @@ public class MapService {
                 "&format=jpg" +
                 "&layer=basic" +
                 "&style=main" +
-                "&width=300&height=300" +
+                "&width="+width+
+                "&height=" +height+
                 "&view=Unified";
         urls[0] =url;
         return urls;

@@ -17,94 +17,116 @@ import java.util.ArrayList
 @ManagedBean()
 @RequestScoped
 
-public class Place { 
-  String streetAddress = "29419 112th Ave SE",
-         city = "Auburn", 
-  		 state = "WA",
-  		 zip = "98001",
-  		 weather = null 
-  
-  String[] mapUrls = null
-  int zoomIndex = 0
+public class Place {
+    String streetAddress = "29419 112th Ave SE"
+      String city = "Auburn",
+           state = "WA",
+           zip = "98001",
+            width = "300",
+            height ="300",
+            days ="5",
+           weather = null
+
+    String[] mapUrls = null
+    int zoomIndex = 0
     String lat ="1",
-    longg = "2"
-  
-  // CONSTRUCTORS
-  
-  public Place() {}
-  
-  public Place(String streetAddress, String city, String state,
-		  String[] mapUrls, String weather) {
-    setStreetAddress(streetAddress)
-    setCity(city)
-    setState(state)
-    setMapUrls(mapUrls)
-    setWeather(weather)
-  }
-  
-  // EVENT HANDLER
-  
-  public String fetch() {
-	FacesContext fc = FacesContext.getCurrentInstance()	    
-	ELResolver elResolver = fc.getApplication().getELResolver();
+           longg = "2"
+
+    // CONSTRUCTORS
+
+    public Place() {}
+
+    public Place(String days, String city, String height,
+            String width, String[] mapUrls, String weather) {
+       // setStreetAddress(streetAddress)
+        setHeight(height)
+        setWidth(width)
+        setDays(days)
+        setCity(city)
+//        setState(state)
+        setMapUrls(mapUrls)
+        setWeather(weather)
+    }
+
+    // EVENT HANDLER
+
+    public String fetch() {
+        FacesContext fc = FacesContext.getCurrentInstance()
+        ELResolver elResolver = fc.getApplication().getELResolver();
 
 
-      WeatherService ws = elResolver.getValue(
-	              fc.getELContext(), null, "weatherService1");
+        WeatherService ws = elResolver.getValue(
+                fc.getELContext(), null, "weatherService1");
 
-      Document weather_respond = ws.getWeatherForZip(zip, true, city)
-      weather = ws.getWeatherFromDocument(weather_respond)
-      lat = ws.getLatFromDocument(weather_respond)
-      longg = ws.getLongFromDocument(weather_respond)
+        Document weather_respond = ws.getWeatherForZip(true, city)
+        weather = ws.getWeatherFromDocument(weather_respond)
+        lat = ws.getLatFromDocument(weather_respond)
+        longg = ws.getLongFromDocument(weather_respond)
 
-      MapService ms = elResolver.getValue(
-              fc.getELContext(), null, "mapService1")
+        MapService ms = elResolver.getValue(
+                fc.getELContext(), null, "mapService1")
 
-      mapUrls = ms.getMap(lat, longg, zoomIndex)
+        mapUrls = ms.getMap(lat, longg, zoomIndex, width, height)
 
-      Places places = elResolver.getValue(
-              fc.getELContext(), null, "places")
-        places.addPlace(streetAddress, city, state, mapUrls, weather)
+        Places places = elResolver.getValue(
+                fc.getELContext(), null, "places")
+        places.addPlace(days, city, height,width, mapUrls, weather)
 
-    null
-  }
-  
-  public void zoomChanged(ValueChangeEvent e) {
-    String value = e.getComponent().getValue();
-    zoomIndex = (new Integer(value)).intValue()
-  }
-  
-  // PROPERTY SETTER AND GETTERS
-  
-  public void setMapUrls(String[] mapUrls) {
-	this.mapUrls = mapUrls;
-  }
-  public String[] getMapUrls() {
-    mapUrls == null ? {""} : mapUrls
-  }
-  
-  public String getMapUrl() {
-	return mapUrls == null ? "" : mapUrls[zoomIndex]
-  }
-  
-  public String getZoomLevel() {
-    return (new Integer(zoomIndex)).toString()
-  }
+        null
+    }
 
-  public void setStreetAddress(String streetAddress) {
-    this.streetAddress = streetAddress
-  }
-  public String getStreetAddress() { return streetAddress; }
-  
-  public void setCity(String city) { this.city = city }
-  public String getCity() { return city; }
-  
-  public void setZip(String zip) { this.zip = zip }
-  public String getZip() { return zip; }
+    public void zoomChanged(ValueChangeEvent e) {
+        String value = e.getComponent().getValue();
+        zoomIndex = (new Integer(value)).intValue()
+    }
 
-  public void setWeather(String weather) { this.weather = weather }
-  public String getWeather() { return weather; }
+    // PROPERTY SETTER AND GETTERS
 
-  public void setState(String state) { this.state = state }
-  public String getState() { return state; }
+    public void setMapUrls(String[] mapUrls) {
+        this.mapUrls = mapUrls;
+    }
+    public String[] getMapUrls() {
+        mapUrls == null ? {""} : mapUrls
+    }
+
+    public String getMapUrl() {
+        return mapUrls == null ? "" : mapUrls[zoomIndex]
+    }
+
+    public String getZoomLevel() {
+        return (new Integer(zoomIndex)).toString()
+    }
+
+//    public void setStreetAddress(String streetAddress) {
+//        this.streetAddress = streetAddress
+//    }
+//    public String getStreetAddress() { return streetAddress; }
+
+    public void setCity(String city) { this.city = city }
+    public String getCity() { return city; }
+
+//    public void setZip(String zip) { this.zip = zip }
+//    public String getZip() { return zip; }
+
+    public void setWeather(String weather) { this.weather = weather }
+    public String getWeather() { return weather; }
+
+//    public void setState(String state) { this.state = state }
+//    public String getState() { return state; }
+
+    public void setHeight(String height) {
+        this.height = height
+    }
+    public String getHeight() { return height; }
+
+    public void setWidth(String width) {
+        this.width = width
+    }
+    public String getWidth() { return width; }
+
+    public void setDays(String days) {
+        this.days = days
+    }
+    public String getDays() { return days; }
+
 }

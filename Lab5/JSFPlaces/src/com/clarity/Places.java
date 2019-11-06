@@ -31,16 +31,17 @@ public class Places {
     new SelectItem("11")
  };
   
-  public void addPlace(String streetAddress, 
+  public void addPlace(String days,
 		               String city, 
-		               String state,
+		               String height,
+                       String width,
 		               String[] mapUrls,
 		               String weather) {
 	if (places == null) {
       places  = new ArrayList<Place>();
 	}
 	
-    Place place = new Place(streetAddress, city, state, mapUrls, weather);
+    Place place = new Place(days, city, height,width, mapUrls, weather);
     places.add(place);
   }
   
