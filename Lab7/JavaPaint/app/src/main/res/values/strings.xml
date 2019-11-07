@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JavaPaint</string>
+    <string name="kolor">Kolor</string>
+    <string name="type">Typ</string>
+</resources>
