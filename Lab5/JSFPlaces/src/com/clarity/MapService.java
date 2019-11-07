@@ -32,7 +32,6 @@ public class MapService {
                     lat,longg, APPID, i);
 
             if (document == null) {
-                System.out.print("asfadsgdsg");
                 cannotAccessWebService = true;
                 break;
             }

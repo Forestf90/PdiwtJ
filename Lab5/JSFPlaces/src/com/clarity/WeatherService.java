@@ -38,7 +38,7 @@ public class WeatherService {
     private static final String oauth_signature = "6G/F55t61122s21JBdPNXZKeluo=";
 
 
-    public Document getWeatherForZip(boolean isFarenheit, String city) throws Exception{
+    public Document getWeatherForZip(boolean isFarenheit, String city, int days) throws Exception{
 
         long oauth_timestamp = new Date().getTime() / 1000;
         byte[] nonce = new byte[32];
@@ -87,7 +87,7 @@ public class WeatherService {
                 "oauth_version=\"1.0\"";
         return getWeatherDocument(url, authorizationLine);
     }
-    public String getWeatherFromDocument(Document document) {
+    public String getWeatherFromDocument(Document document, int days) {
         Element item =
                 (Element) document.getElementsByTagName("item")
                         .item(0);
@@ -96,17 +96,38 @@ public class WeatherService {
                 ((Element) item.getElementsByTagName("title").item(0))
                         .getFirstChild().getNodeValue();
 
-        Element description =
-                (Element) item.getElementsByTagName("description")
-                        .item(0);
+//        Element description =
+//                (Element) item.getElementsByTagName("yweather:forecast").;
 
+        StringBuilder desc= new StringBuilder();
+        if(days >9) days=9;
+        Element first = (Element) item.getElementsByTagName("yweather:condition").item(0);
+        desc.append("<b>Current weather:</b> <br>");
+        desc.append("Temp: ");
+        desc.append(first.getAttribute("temp"));
+        desc.append(", Condition: ");
+        desc.append(first.getAttribute("text"));
+        desc.append("<br>");
+        desc.append("<b>Forecast:</b>");
+        desc.append("<br>");
+        for(int i=0; i<days; i++){
+            Element xd = (Element) item.getElementsByTagName("yweather:forecast").item(i);
+            desc.append(xd.getAttribute("day"));
+            desc.append(": Hight: ");
+            desc.append(xd.getAttribute("high"));
+            desc.append(", Low: ");
+            desc.append(xd.getAttribute("low"));
+            desc.append(", Condition: ");
+            desc.append(xd.getAttribute("text"));
+            desc.append("<br>");
+        }
         Element image =
                 (Element) item.getElementsByTagName("img")
                         .item(0);
 
         return "<div class='heading'>" + title + "</div>"
-                + "<hr/>"
-                + description.getFirstChild().getNodeValue();
+                + "<hr/>"+ desc;
+               // + description.getFirstChild().getNodeValue();
     }
 
     public String getLatFromDocument(Document document) {

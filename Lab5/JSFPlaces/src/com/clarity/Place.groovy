@@ -24,8 +24,8 @@ public class Place {
            zip = "98001",
             width = "300",
             height ="300",
-            days ="5",
            weather = null
+    int days =5
 
     String[] mapUrls = null
     int zoomIndex = 0
@@ -36,7 +36,7 @@ public class Place {
 
     public Place() {}
 
-    public Place(String days, String city, String height,
+    public Place(int days, String city, String height,
             String width, String[] mapUrls, String weather) {
        // setStreetAddress(streetAddress)
         setHeight(height)
@@ -58,8 +58,8 @@ public class Place {
         WeatherService ws = elResolver.getValue(
                 fc.getELContext(), null, "weatherService1");
 
-        Document weather_respond = ws.getWeatherForZip(true, city)
-        weather = ws.getWeatherFromDocument(weather_respond)
+        Document weather_respond = ws.getWeatherForZip(true, city, days)
+        weather = ws.getWeatherFromDocument(weather_respond, days)
         lat = ws.getLatFromDocument(weather_respond)
         longg = ws.getLongFromDocument(weather_respond)
 
@@ -124,9 +124,9 @@ public class Place {
     }
     public String getWidth() { return width; }
 
-    public void setDays(String days) {
+    public void setDays(int days) {
         this.days = days
     }
-    public String getDays() { return days; }
+    public int getDays() { return days; }
 
 }

@@ -31,7 +31,7 @@ public class Places {
     new SelectItem("11")
  };
   
-  public void addPlace(String days,
+  public void addPlace(int days,
 		               String city, 
 		               String height,
                        String width,
